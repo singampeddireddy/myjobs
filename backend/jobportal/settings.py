@@ -143,3 +143,14 @@ MEDIA_ROOT = BASE_DIR /'media'
 REST_FRAMEWORK = {}
 
 
+import os
+
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'myjobs-55hd.onrender.com',  # ✅ Add your Render domain here
+]
+
+# Optional dynamic method (safer for future deployments)
+if os.environ.get('RENDER'):
+    ALLOWED_HOSTS.append(os.environ.get('RENDER_EXTERNAL_HOSTNAME'))
