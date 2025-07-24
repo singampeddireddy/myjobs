@@ -1,41 +1,71 @@
-import React, { useState } from 'react';
-import API from '../api/api';
-import { useAuth } from '../context/AuthContext';
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 
-function LoginForm() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const { login } = useAuth();
+const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await API.post('/login/', { username, password });
-      login(res.data.token);
+      const res = await axios.post("http://localhost:8000/api/login/", {
+        username,
+        password,
+      });
+      localStorage.setItem("token", res.data.token);
+      navigate("/home");
     } catch (err) {
-      setError('Invalid credentials');
+      alert("Login failed: " + err.response?.data?.detail || "Unknown error");
     }
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Login</h2>
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <input type="text" placeholder="Username" value={username}
-          onChange={(e) => setUsername(e.target.value)} required
-          className="w-full p-2 border rounded" />
-        <input type="password" placeholder="Password" value={password}
-          onChange={(e) => setPassword(e.target.value)} required
-          className="w-full p-2 border rounded" />
-        <button type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded w-full">
-          Login
-        </button>
-        {error && <p className="text-red-500">{error}</p>}
-      </form>
+    <div
+      className="h-screen w-full bg-cover bg-center flex items-center justify-center"
+      style={{
+        backgroundImage: `url('/spooky-bg.png')`,
+        fontFamily: "'Creepster', cursive",
+      }}
+    >
+      <div className="bg-black/70 backdrop-blur-sm shadow-2xl rounded-2xl p-10 max-w-md w-full border-2 border-pink-400">
+        <h1 className="text-4xl text-center text-pink-500 mb-6 drop-shadow-md">
+          🎃 Welcome Back!
+        </h1>
+        <form onSubmit={handleLogin} className="flex flex-col gap-5">
+          <input
+            className="p-3 rounded bg-white/80 border border-pink-300 placeholder-gray-800 font-sans"
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            className="p-3 rounded bg-white/80 border border-pink-300 placeholder-gray-800 font-sans"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button
+            type="submit"
+            className="bg-pink-600 text-white font-semibold py-2 rounded hover:bg-pink-700 transition duration-200"
+          >
+            Login
+          </button>
+        </form>
+        <p className="text-white text-sm text-center mt-4 font-sans">
+          New here?{" "}
+          <Link to="/register" className="text-pink-300 underline hover:text-white">
+            Register now
+          </Link>
+        </p>
+      </div>
     </div>
   );
-}
+};
 
-export default LoginForm;
+export default Login;

@@ -5,17 +5,18 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4 py-10">
-      <h1 className="text-3xl font-bold text-center mb-10">Welcome to the Job Portal</h1>
+    <div className="min-h-screen bg-[#F4F7FE] flex flex-col items-center justify-center px-4 py-10">
+      <h1 className="text-4xl font-bold text-center mb-8 text-purple-700">Welcome to the Job Portal</h1>
 
-      <p className="text-lg text-gray-700 mb-8 text-center">
+      <p className="text-lg text-gray-700 mb-10 text-center max-w-2xl">
         Find the best jobs that match your resume, explore job listings, and post jobs easily.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-4xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl">
+        {/* Resume (Green) */}
         <button
           onClick={() => navigate("/upload")}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg"
+          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg"
         >
           Upload Resume
         </button>
@@ -27,6 +28,7 @@ const HomePage = () => {
           View Resumes
         </button>
 
+        {/* Job (Purple) */}
         <button
           onClick={() => navigate("/post-job")}
           className="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg"
@@ -36,16 +38,24 @@ const HomePage = () => {
 
         <button
           onClick={() => navigate("/jobs")}
-          className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-6 rounded-lg"
+          className="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg"
         >
           View Jobs
         </button>
 
+        {/* Match/Online (Orange) */}
         <button
           onClick={() => navigate("/match-resume")}
-          className="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 px-6 rounded-lg"
+          className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg"
         >
           Match Resume to All Jobs
+        </button>
+
+        <button
+          onClick={() => navigate("/online-jobs")}
+          className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg"
+        >
+          Online Jobs
         </button>
 
         <button
@@ -55,6 +65,7 @@ const HomePage = () => {
           Match Resume to Online Jobs
         </button>
 
+        {/* Profile (Indigo) */}
         <button
           onClick={() => navigate("/profile")}
           className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg"
@@ -62,6 +73,7 @@ const HomePage = () => {
           My Profile
         </button>
 
+        {/* Logout (Red) */}
         <button
           onClick={() => {
             localStorage.removeItem("token");

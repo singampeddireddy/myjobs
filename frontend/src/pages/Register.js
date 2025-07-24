@@ -1,6 +1,6 @@
-// src/pages/Register.js
+// src/pages/Register.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -26,40 +26,59 @@ function Register() {
       localStorage.setItem('token', data.token);
       navigate('/');
     } else {
-      setError(JSON.stringify(data)); // Show detailed error
+      setError(JSON.stringify(data)); // Display detailed error
     }
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Register</h2>
-      <form onSubmit={handleRegister}>
-        <input
-          type="text"
-          placeholder="Username"
-          className="block border p-2 mb-2 w-full"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="block border p-2 mb-2 w-full"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          className="block border p-2 mb-2 w-full"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2">Register</button>
-        {error && <p className="text-red-500 mt-2">Error: {error}</p>}
-      </form>
+    <div className="flex items-center justify-center h-screen bg-gradient-to-br from-purple-600 via-yellow-100 to-orange-400">
+      <div className="bg-white shadow-xl rounded-2xl p-10 w-full max-w-md">
+        <h2 className="text-3xl font-bold text-blue-700 mb-6 text-center">Register</h2>
+        <form onSubmit={handleRegister} className="flex flex-col gap-4">
+          <input
+            type="text"
+            placeholder="Username"
+            className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-2 rounded hover:opacity-90 transition"
+          >
+            Register
+          </button>
+        </form>
+
+        {error && (
+          <p className="text-red-500 text-sm mt-3 text-center">
+            Error: {error}
+          </p>
+        )}
+
+        <p className="mt-4 text-center text-sm text-gray-700">
+          Already have an account?{" "}
+          <Link to="/" className="text-orange-600 font-medium hover:underline">
+            Login here
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
