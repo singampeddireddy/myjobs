@@ -87,7 +87,7 @@ import dj_database_url
 # Database
 DATABASES = {
     'default': dj_database_url.parse(
-        'postgresql://postgres.zgnwngvblxsycxzefvcz:123456@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres'
+        'postgresql://jobportal_1xgg_user:Alj7gvwnDADtDajAJvkBJt1H0d5Enpvv@dpg-d211e9qli9vc739gct5g-a/jobportal_1xgg'
         
         
     )
