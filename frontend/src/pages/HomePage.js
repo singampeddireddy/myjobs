@@ -1,89 +1,49 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; // Import context for logout
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth(); // Get logout function from context
 
+  const handleLogout = () => {
+    // CRITICAL FIX: Use the central logout function to clear state
+    logout();
+    navigate('/'); // Redirect to login page after logout
+  };
+
+  // This UI is now the sophisticated scrolling homepage
   return (
-    <div className="min-h-screen bg-[#F4F7FE] flex flex-col items-center justify-center px-4 py-10">
-      <h1 className="text-4xl font-bold text-center mb-8 text-purple-700">Welcome to the Job Portal</h1>
+    <div className="page-content">
+        {/* Section 1: Upload Resume */}
+        <section className="page-section">
+            <div className="content-wrapper">
+                <div className="section-grid">
+                    <div className="section-content">
+                        <h1>Optimize your resume for ATS scanners.</h1>
+                        <p>Get invited to more interviews. Our checker simulates an ATS scan to ensure your resume always gets into the hands of a human recruiter.</p>
+                        <Link to="/upload" className="btn btn-primary">Upload Your Resume</Link>
+                    </div>
+                    <div className="section-image">
+                        <div className="section-visual-card">
+                            <h3>ATS Score Analysis</h3>
+                            <div className="card-stat"><span className="label">Overall Score</span><span className="value">87/100</span></div>
+                            <div className="card-stat"><span className="label">Keywords</span><span className="value">92%</span></div>
+                            <div className="card-stat"><span className="label">Formatting</span><span className="value">Good</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      <p className="text-lg text-gray-700 mb-10 text-center max-w-2xl">
-        Find the best jobs that match your resume, explore job listings, and post jobs easily.
-      </p>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl">
-        {/* Resume (Green) */}
-        <button
-          onClick={() => navigate("/upload")}
-          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg"
-        >
-          Upload Resume
-        </button>
-
-        <button
-          onClick={() => navigate("/resumes")}
-          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg"
-        >
-          View Resumes
-        </button>
-
-        {/* Job (Purple) */}
-        <button
-          onClick={() => navigate("/post-job")}
-          className="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg"
-        >
-          Post Job
-        </button>
-
-        <button
-          onClick={() => navigate("/jobs")}
-          className="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg"
-        >
-          View Jobs
-        </button>
-
-        {/* Match/Online (Orange) */}
-        <button
-          onClick={() => navigate("/match-resume")}
-          className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg"
-        >
-          Match Resume to All Jobs
-        </button>
-
-        <button
-          onClick={() => navigate("/online-jobs")}
-          className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg"
-        >
-          Online Jobs
-        </button>
-
-        <button
-          onClick={() => navigate("/match-online-jobs")}
-          className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg"
-        >
-          Match Resume to Online Jobs
-        </button>
-
-        {/* Profile (Indigo) */}
-        <button
-          onClick={() => navigate("/profile")}
-          className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg"
-        >
-          My Profile
-        </button>
-
-        {/* Logout (Red) */}
-        <button
-          onClick={() => {
-            localStorage.removeItem("token");
-            navigate("/");
-          }}
-          className="bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-lg"
-        >
-          Logout
-        </button>
-      </div>
+        {/* You can add all the other sections here just like in the main project... */}
+        
+        {/* Example Logout Button (should be in a footer) */}
+        <div style={{textAlign: 'center', padding: '2rem'}}>
+            <button onClick={handleLogout} className="btn btn-primary" style={{backgroundColor: '#c53030'}}>
+                Logout
+            </button>
+        </div>
     </div>
   );
 };
