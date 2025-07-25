@@ -1,6 +1,9 @@
 // src/pages/Register.jsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+// IMPORTANT FIX #1: We must import the authentication context to log the user in.
+// This assumes your friend has a similar AuthContext file to the one we created.
+import { useAuth } from '../context/AuthContext'; 
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -8,25 +11,41 @@ function Register() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  // IMPORTANT FIX #2: Get the login function from the context.
+  const { login } = useAuth();
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setError(''); // Clear previous errors
 
-    const response = await fetch('https://myjobs-55hd.onrender.com/api/register/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password, email }),
-    });
+    try { // Added a try...catch block for better error handling
+        const response = await fetch('https://myjobs-55hd.onrender.com/api/register/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password, email }),
+        });
 
-    const data = await response.json();
+        const data = await response.json();
 
-    if (response.ok) {
-      localStorage.setItem('token', data.token);
-      navigate('/');
-    } else {
-      setError(JSON.stringify(data)); // Display detailed error
+        if (response.ok) {
+            // --- CRITICAL FIX #3 ---
+            // Instead of just saving the token, we use the login function.
+            // This updates the application's state so it knows the user is authenticated.
+            login(data.token);
+            
+            // Navigate to the main homepage after successful login.
+            navigate('/'); 
+        } else {
+            // IMPROVEMENT #1: Display a cleaner, more user-friendly error message.
+            // This will turn an error like {"username":["user already exists"]} into "user already exists".
+            const errorMessage = Object.values(data).join(' ');
+            setError(errorMessage);
+        }
+    } catch (err) {
+        // This catches network errors if the server can't be reached.
+        setError('Registration failed. Please try again later.');
     }
   };
 
@@ -57,6 +76,7 @@ function Register() {
             className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required // Email should likely be required
           />
           <button
             type="submit"
@@ -74,7 +94,8 @@ function Register() {
 
         <p className="mt-4 text-center text-sm text-gray-700">
           Already have an account?{" "}
-          <Link to="/" className="text-orange-600 font-medium hover:underline">
+          {/* FIX #4: The link should point to /login, not the homepage (/). */}
+          <Link to="/login" className="text-orange-600 font-medium hover:underline">
             Login here
           </Link>
         </p>
