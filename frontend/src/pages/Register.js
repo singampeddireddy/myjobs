@@ -12,7 +12,7 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    const response = await fetch('register/', {
+    const response = await fetch('https://myjobs-55hd.onrender.com/api/register/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
