@@ -1,55 +1,69 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import API from '../api/api'; // Use the central API instance
-import { useAuth } from '../context/AuthContext'; // Use the AuthContext for state management
+import axios from "axios";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth(); // Get the login function from context
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(""); // Clear previous errors
     try {
-      const res = await API.post("/login/", {
+      const res = await axios.post("https://myjobs-55hd.onrender.com/api/login/", {
         username,
         password,
       });
-      // CRITICAL FIX: Use the login function to update the app's state
-      login(res.data.token);
-      navigate("/home"); // Navigate to the homepage
+      localStorage.setItem("token", res.data.token);
+      navigate("/home");
     } catch (err) {
-      // FIX: Display error message on the page instead of using alert()
-      const errorMessage = err.response?.data?.detail || "Login failed. Please check your credentials.";
-      setError(errorMessage);
+      alert("Login failed: " + err.response?.data?.detail || "Unknown error");
     }
   };
 
-  // This UI is now consistent with the main project's theme
   return (
-    <div className="login-page-container">
-        <h1 className="login-logo">HireWise</h1>
-        <div className="login-card">
-            <h2>Welcome Back</h2>
-            <form onSubmit={handleLogin}>
-                <div className="login-form-group">
-                    <label className="login-form-label">Username</label>
-                    <input className="login-form-input" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
-                </div>
-                <div className="login-form-group">
-                    <label className="login-form-label">Password</label>
-                    <input className="login-form-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                </div>
-                <button type="submit" className="login-btn">Sign In</button>
-                {error && <p className="login-error-message">{error}</p>}
-            </form>
-            <p className="login-form-link">
-                Don't have an account? <Link to="/register">Register here</Link>
-            </p>
-        </div>
+    <div
+      className="h-screen w-full bg-cover bg-center flex items-center justify-center"
+      style={{
+        backgroundImage: url('/spooky-bg.png'), // Place this image in public/spooky-bg.png
+        fontFamily: "'Creepster', cursive",
+      }}
+    >
+      <div className="bg-white/10 backdrop-blur-lg shadow-lg rounded-xl p-10 max-w-md w-full border border-white/20">
+        <h1 className="text-4xl text-center text-pink-600 mb-6 drop-shadow-md">
+          Welcome Back 👻
+        </h1>
+        <form onSubmit={handleLogin} className="flex flex-col gap-5">
+          <input
+            className="p-3 rounded bg-white/80 border border-pink-300 placeholder-gray-800"
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            className="p-3 rounded bg-white/80 border border-pink-300 placeholder-gray-800"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button
+            type="submit"
+            className="bg-pink-600 text-white py-2 rounded shadow hover:bg-pink-700 transition"
+          >
+            Login
+          </button>
+        </form>
+        <p className="text-white text-sm text-center mt-4">
+          New here?{" "}
+          <Link to="/register" className="text-pink-300 underline">
+            Register now
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };
